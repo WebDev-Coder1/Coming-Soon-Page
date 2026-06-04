@@ -48,6 +48,16 @@ export default function Home() {
 
     const normalizedEmail = email.trim().toLowerCase();
 
+    // Validate email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(normalizedEmail)) {
+      setError('Please enter a valid email address.');
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return;
+    }
+
     // Check localStorage for duplicate submissions on this device
     try {
       const subbedEmails = JSON.parse(localStorage.getItem('subscribed_emails') || '[]');

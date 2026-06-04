@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       from: `"kaifcoder.in Waitlist" <${emailUser}>`,
       to: 'kaif.webdev@gmail.com',
       subject: `🚀 New Waitlist Lead: ${normalizedEmail}`,
-      text: `New subscriber email: ${normalizedEmail} (Spot #${spotNumber})`,
+      text: `New subscriber email: ${normalizedEmail} (Status: Active)`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0a13; padding: 40px 20px; text-align: center; color: #fff;">
           <div style="max-width: 500px; margin: 0 auto; background-color: #12111a; border: 1px solid #232230; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
@@ -128,8 +128,8 @@ export async function POST(request: Request) {
                   <td style="padding: 10px 0; text-align: right; color: #e2e8f0; font-weight: 500;">${formattedDate} (IST)</td>
                 </tr>
                 <tr>
-                  <td style="padding: 10px 0; font-weight: 600; color: #6e6b8a;">Waitlist Queue Spot</td>
-                  <td style="padding: 10px 0; text-align: right; color: #818cf8; font-weight: 700;">#${spotNumber}</td>
+                  <td style="padding: 10px 0; font-weight: 600; color: #6e6b8a;">Status</td>
+                  <td style="padding: 10px 0; text-align: right; color: #10b981; font-weight: 700;">Active</td>
                 </tr>
               </table>
             </div>

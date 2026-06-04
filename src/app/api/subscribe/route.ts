@@ -49,20 +49,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Save before sending to assign the spot number
+    saveToWaitlist(normalizedEmail, waitlist);
+    const spotNumber = waitlist.length;
+
+    // Log the signup to standard output (so it is recorded in Vercel logs)
+    console.log(`[WAITLIST SIGNUP] Email: ${normalizedEmail} (Spot #${spotNumber})`);
+
     const emailUser = process.env.EMAIL_USER;
     const emailPass = process.env.EMAIL_PASS;
 
     if (!emailUser || !emailPass) {
-      console.warn('SMTP credentials missing. Please check your .env.local file.');
-      return NextResponse.json(
-        { error: 'Email configuration is missing on the server.' },
-        { status: 500 }
-      );
+      console.warn('SMTP credentials missing. Please check your .env.local or Vercel environment variables. Email notification skipped, but the signup has been successfully logged.');
+      return NextResponse.json({
+        success: true,
+        message: 'Subscription saved (email notification skipped due to missing SMTP credentials).'
+      });
     }
-
-    // Save before sending to assign the spot number
-    saveToWaitlist(normalizedEmail, waitlist);
-    const spotNumber = waitlist.length;
 
     // 2. Configure SMTP Transporter using environment variables
     const transporter = nodemailer.createTransport({

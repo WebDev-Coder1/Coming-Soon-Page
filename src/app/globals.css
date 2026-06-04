@@ -122,9 +122,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground overflow-hidden h-screen;
+    @apply bg-background text-foreground overflow-y-auto md:overflow-hidden min-h-screen md:h-screen;
   }
   html {
-    @apply font-sans overflow-hidden h-screen;
+    @apply font-sans overflow-y-auto md:overflow-hidden min-h-screen md:h-screen;
   }
 }

@@ -97,7 +97,7 @@ export default function Home() {
   }, [targetDate]);
 
   return (
-    <div className="relative h-screen w-full flex flex-col items-center justify-between bg-[#030303] text-white overflow-hidden font-sans">
+    <div className="relative min-h-screen md:h-screen w-full flex flex-col items-center justify-between bg-[#030303] text-white overflow-y-auto md:overflow-hidden font-sans">
       {/* Light Rays Background Overlay */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <LightRays
@@ -118,7 +118,7 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className="relative w-full max-w-7xl mx-auto px-6 py-8 flex justify-between items-center z-10">
+      <header className="relative w-full max-w-7xl mx-auto px-6 py-4 md:py-8 flex justify-between items-center z-10 shrink-0">
         <div className="flex items-center gap-2">
           <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">KAIFCODER™</span>
         </div>
@@ -137,36 +137,36 @@ export default function Home() {
       </header>
 
       {/* Main Content Area */}
-      <main className="relative flex-1 flex flex-col items-center justify-center text-center px-4 max-w-4xl mx-auto z-10 py-12">
+      <main className="relative flex-1 flex flex-col items-center justify-center text-center px-4 max-w-4xl mx-auto z-10 py-6 md:py-12 w-full">
         {/* Launch Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-medium text-indigo-300 mb-8 animate-pulse shadow-inner shadow-white/[0.02]">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-medium text-indigo-300 mb-4 md:mb-8 animate-pulse shadow-inner shadow-white/[0.02]">
           <span className="size-1.5 rounded-full bg-indigo-400" />
           👨‍💻 PORTFOLIO LAUNCHING SOON
         </div>
 
         {/* Hero Title */}
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white via-zinc-100 to-zinc-500 max-w-3xl leading-[1.1]">
+        <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white via-zinc-100 to-zinc-500 max-w-3xl leading-[1.1]">
           Full-Stack & AI Developer
         </h1>
 
-        <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-12 font-light leading-relaxed">
+        <p className="text-zinc-400 text-sm md:text-lg max-w-2xl mb-6 md:mb-12 font-light leading-relaxed">
           Building high-performance web applications and intelligent AI integrations. Portfolio launching soon.
         </p>
 
         {/* Countdown Timer */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 max-w-2xl w-full px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-16 max-w-2xl w-full px-4">
           {[
             { label: 'Days', value: timeLeft.days },
             { label: 'Hours', value: timeLeft.hours },
             { label: 'Minutes', value: timeLeft.minutes },
             { label: 'Seconds', value: timeLeft.seconds }
           ].map((item, idx) => (
-            <div key={idx} className="relative group overflow-hidden rounded-2xl bg-white/[0.02] border border-white/[0.05] p-6 backdrop-blur-md transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.03]">
+            <div key={idx} className="relative group overflow-hidden rounded-2xl bg-white/[0.02] border border-white/[0.05] p-3 sm:p-4 md:p-6 backdrop-blur-md transition-all duration-300 hover:border-white/[0.1] hover:bg-white/[0.03]">
               <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
-              <div className="text-4xl md:text-5xl font-mono font-bold tracking-tight mb-2 text-zinc-100">
+              <div className="text-3xl md:text-5xl font-mono font-bold tracking-tight mb-1 text-zinc-100">
                 {mounted ? String(item.value).padStart(2, '0') : '--'}
               </div>
-              <div className="text-xs md:text-sm text-zinc-500 uppercase tracking-widest font-medium">
+              <div className="text-[10px] md:text-sm text-zinc-500 uppercase tracking-widest font-medium">
                 {item.label}
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="relative w-full max-w-7xl mx-auto px-6 py-8 text-center text-zinc-600 text-xs z-10">
+      <footer className="relative w-full max-w-7xl mx-auto px-6 py-4 md:py-8 text-center text-zinc-600 text-xs z-10 shrink-0">
         &copy; {new Date().getFullYear()} kaifcoder.in. All rights reserved.
       </footer>
     </div>

@@ -46,6 +46,23 @@ export default function Home() {
     e.preventDefault();
     if (!email) return;
 
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Check localStorage for duplicate submissions on this device
+    try {
+      const subbedEmails = JSON.parse(localStorage.getItem('subscribed_emails') || '[]');
+      if (subbedEmails.includes(normalizedEmail)) {
+        setError('You have already subscribed with this email!');
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+        return;
+      }
+    } catch (err) {
+      console.error('Error reading from localStorage:', err);
+    }
+
     setLoading(true);
     setError(null);
 
@@ -55,7 +72,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: normalizedEmail }),
       });
 
       const data = await res.json();
@@ -63,6 +80,18 @@ export default function Home() {
       if (res.ok) {
         setSubmitted(true);
         setEmail('');
+
+        // Save to localStorage to prevent future submissions of this email
+        try {
+          const subbedEmails = JSON.parse(localStorage.getItem('subscribed_emails') || '[]');
+          if (!subbedEmails.includes(normalizedEmail)) {
+            subbedEmails.push(normalizedEmail);
+            localStorage.setItem('subscribed_emails', JSON.stringify(subbedEmails));
+          }
+        } catch (err) {
+          console.error('Error saving to localStorage:', err);
+        }
+
         // Clear success message and restore form after 5 seconds
         setTimeout(() => {
           setSubmitted(false);

@@ -6,6 +6,9 @@ import path from 'path';
 // Local storage path for saving waitlist subscribers
 const filePath = path.join(process.cwd(), 'waitlist.json');
 
+// In-memory cache to track signups and prevent duplicates in serverless environments
+const memoryWaitlist = new Set<string>();
+
 // Helper to read waitlist emails from JSON file
 const getWaitlist = (): string[] => {
   try {
@@ -41,8 +44,8 @@ export async function POST(request: Request) {
     const normalizedEmail = email.trim().toLowerCase();
     const waitlist = getWaitlist();
 
-    // 1. Check for duplicates
-    if (waitlist.includes(normalizedEmail)) {
+    // 1. Check for duplicates (both in static waitlist.json and in-memory cache)
+    if (waitlist.includes(normalizedEmail) || memoryWaitlist.has(normalizedEmail)) {
       return NextResponse.json(
         { error: 'You are already in the waitlist!' },
         { status: 400 }
@@ -51,7 +54,10 @@ export async function POST(request: Request) {
 
     // Save before sending to assign the spot number
     saveToWaitlist(normalizedEmail, waitlist);
-    const spotNumber = waitlist.length;
+    memoryWaitlist.add(normalizedEmail);
+    
+    // On Vercel, the file waitlist might not persist. So we use the max of memory and file lists
+    const spotNumber = Math.max(waitlist.length, memoryWaitlist.size);
 
     // Log the signup to standard output (so it is recorded in Vercel logs)
     console.log(`[WAITLIST SIGNUP] Email: ${normalizedEmail} (Spot #${spotNumber})`);
@@ -60,16 +66,18 @@ export async function POST(request: Request) {
     const emailPass = process.env.EMAIL_PASS;
 
     if (!emailUser || !emailPass) {
-      console.warn('SMTP credentials missing. Please check your .env.local or Vercel environment variables. Email notification skipped, but the signup has been successfully logged.');
-      return NextResponse.json({
-        success: true,
-        message: 'Subscription saved (email notification skipped due to missing SMTP credentials).'
-      });
+      console.error('SMTP credentials missing in environment variables.');
+      return NextResponse.json(
+        { error: 'Email configuration is missing on the server. Please add EMAIL_USER and EMAIL_PASS environment variables in your Vercel settings.' },
+        { status: 500 }
+      );
     }
 
     // 2. Configure SMTP Transporter using environment variables
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: emailUser,
         pass: emailPass,
